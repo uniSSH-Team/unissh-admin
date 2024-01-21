@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  "use client";
-  const fragment = new URLSearchParams(window.location.hash.slice(1));
-  const [accessToken, tokenType] = [
-    fragment.get("access_token"),
-    fragment.get("token_type"),
-  ];
+  const [verified, setVerified] = useState(false);
 
   useEffect(() => {
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const [accessToken, tokenType] = [
+      fragment.get("access_token"),
+      fragment.get("token_type"),
+    ];
+
     fetch("https://discord.com/api/users/@me", {
       headers: {
         authorization: `${tokenType} ${accessToken}`,
@@ -22,8 +23,11 @@ export default function Home() {
         const { username, discriminator, avatar, id } = response;
         //set the avatar image by constructing a url to access discord's cdn
         if (accessToken) {
-          //set the welcome username string
-          document.getElementById("name").innerText = `${username}`;
+          if (id == "910968511273263104" || id == "418876976963649536") {
+            //set the welcome username string
+            document.getElementById("name").innerText = `${username}`;
+            setVerified(true);
+          }
         }
       })
       .catch(console.error);
@@ -90,44 +94,54 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex flex-col p-4 gap-3">
-        <div className="">
-          <div className="label pt-0 font-semibold text-xl text-shadow-white">
-            User Statistics:
+      {verified ? (
+        <>
+          <div className="flex flex-col p-4 gap-3">
+            <div className="">
+              <div className="label pt-0 font-semibold text-xl text-shadow-white">
+                User Statistics:
+              </div>
+              <div className="stats shadow-xl bg-black">
+                <div className="stat">
+                  <div className="stat-title">Montly active users</div>
+                  <div className="stat-value">31K</div>
+                  <div className="stat-desc">Last 31 Days</div>
+                </div>
+
+                <div className="stat">
+                  <div className="stat-title">New Users</div>
+                  <div className="stat-value">5k</div>
+                  <div className="stat-desc">Last 31 Days</div>
+                </div>
+
+                <div className="stat">
+                  <div className="stat-title">Feature Requests</div>
+                  <div className="stat-value">13</div>
+                  <div className="stat-desc">From GitHub</div>
+                </div>
+
+                <div className="stat">
+                  <div className="stat-title">Current Version:</div>
+                  <div className="stat-value">v0.0.1</div>
+                  <div className="stat-desc">From GitHub</div>
+                </div>
+
+                <div className="stat">
+                  <div className="stat-title">Most popular version:</div>
+                  <div className="stat-value">v0.0.1</div>
+                  <div className="stat-desc">From Analytics API</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="stats shadow-xl bg-black">
-            <div className="stat">
-              <div className="stat-title">Montly active users</div>
-              <div className="stat-value">31K</div>
-              <div className="stat-desc">Last 31 Days</div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-title">New Users</div>
-              <div className="stat-value">5k</div>
-              <div className="stat-desc">Last 31 Days</div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-title">Feature Requests</div>
-              <div className="stat-value">13</div>
-              <div className="stat-desc">From GitHub</div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-title">Current Version:</div>
-              <div className="stat-value">v0.0.1</div>
-              <div className="stat-desc">From GitHub</div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-title">Most popular version:</div>
-              <div className="stat-value">v0.0.1</div>
-              <div className="stat-desc">From Analytics API</div>
-            </div>
+        </>
+      ) : (
+        <>
+          <div className="h-screen w-screen">
+            <h1>Log in?</h1>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </main>
   );
 }
