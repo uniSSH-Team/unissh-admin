@@ -3,13 +3,14 @@
 import { useEffect } from "react";
 
 export default function Home() {
-  useEffect(() => {
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    const [accessToken, tokenType] = [
-      fragment.get("access_token"),
-      fragment.get("token_type"),
-    ];
+  "use client";
+  const fragment = new URLSearchParams(window.location.hash.slice(1));
+  const [accessToken, tokenType] = [
+    fragment.get("access_token"),
+    fragment.get("token_type"),
+  ];
 
+  useEffect(() => {
     fetch("https://discord.com/api/users/@me", {
       headers: {
         authorization: `${tokenType} ${accessToken}`,
@@ -81,7 +82,8 @@ export default function Home() {
           <a
             role="button"
             className="transition-all text-xs text-white/50 hover:text-white/70"
-            href="https://discord.com/api/oauth2/authorize?client_id=1198751523589599315&response_type=code&redirect_uri=https%3A%2F%2Funissh-admin.vercel.app%2F&scope=identify+email+guilds"
+            href="https://discord.com/api/oauth2/authorize?client_id=1198751523589599315&response_type=token&redirect_uri=https%3A%2F%2Funissh-admin.vercel.app%2F&scope=identify"
+            id="name"
           >
             login
           </a>
