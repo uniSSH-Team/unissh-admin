@@ -51,17 +51,44 @@ export default function Home() {
         <div className="navbar-end"></div>
       </div>
 
-      <div className="stats shadow-xl bg-black">
-        <div className="stat">
-          <div className="stat-title">Montly active users</div>
-          <div className="stat-value">31K</div>
-          <div className="stat-desc">Last 31 Days</div>
+      <div className="flex flex-col p-4 gap-3">
+        <div className="">
+          <div className="label pt-0">Statistics:</div>
+          <div className="stats shadow-xl bg-black">
+            <div className="stat">
+              <div className="stat-title">Montly active users</div>
+              <div className="stat-value">31K</div>
+              <div className="stat-desc">Last 31 Days</div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-title">New Users</div>
+              <div className="stat-value">5k</div>
+              <div className="stat-desc">Last 31 Days</div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-title">Feature Requests</div>
+              <div className="stat-value">13</div>
+              <div className="stat-desc">From GitHub</div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-title">Current Version:</div>
+              <div className="stat-value">v0.0.1</div>
+              <div className="stat-desc">From GitHub</div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-title">Most popular version:</div>
+              <div className="stat-value">v0.0.1</div>
+              <div className="stat-desc">From Analytics API</div>
+            </div>
+          </div>
         </div>
 
-        <div className="stat">
-          <div className="stat-title">New Users</div>
-          <div className="stat-value">4</div>
-          <div className="stat-desc"></div>
+        <div className="">
+          <div className="label pt-0">Push new verion:</div>
         </div>
       </div>
     </main>
