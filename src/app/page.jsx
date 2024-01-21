@@ -1,4 +1,33 @@
+"use client";
+
+import { useEffect } from "react";
+
 export default function Home() {
+  useEffect(() => {
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const [accessToken, tokenType] = [
+      fragment.get("access_token"),
+      fragment.get("token_type"),
+    ];
+
+    fetch("https://discord.com/api/users/@me", {
+      headers: {
+        authorization: `${tokenType} ${accessToken}`,
+      },
+    })
+      .then((result) => result.json())
+      .then((response) => {
+        //console.log(response);
+        const { username, discriminator, avatar, id } = response;
+        //set the avatar image by constructing a url to access discord's cdn
+        if (accessToken) {
+          //set the welcome username string
+          document.getElementById("name").innerText = `${username}`;
+        }
+      })
+      .catch(console.error);
+  });
+
   return (
     <main className="h-screen w-screen">
       <div className="navbar min-h-min h-[40px] drag bordered-b" id="navbar">
@@ -48,12 +77,22 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="navbar-end"></div>
+        <div className="navbar-end mr-2">
+          <a
+            role="button"
+            className="transition-all text-xs text-white/50 hover:text-white/70"
+            href="https://discord.com/api/oauth2/authorize?client_id=1198751523589599315&response_type=code&redirect_uri=https%3A%2F%2Funissh-admin.vercel.app%2F&scope=identify+email+guilds"
+          >
+            login
+          </a>
+        </div>
       </div>
 
       <div className="flex flex-col p-4 gap-3">
         <div className="">
-          <div className="label pt-0">Statistics:</div>
+          <div className="label pt-0 font-semibold text-xl text-shadow-white">
+            User Statistics:
+          </div>
           <div className="stats shadow-xl bg-black">
             <div className="stat">
               <div className="stat-title">Montly active users</div>
@@ -85,10 +124,6 @@ export default function Home() {
               <div className="stat-desc">From Analytics API</div>
             </div>
           </div>
-        </div>
-
-        <div className="">
-          <div className="label pt-0">Push new verion:</div>
         </div>
       </div>
     </main>
