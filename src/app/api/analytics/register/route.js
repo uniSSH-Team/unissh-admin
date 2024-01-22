@@ -1,6 +1,6 @@
 import clientPromise from "../../../libs/mongodb.js";
 
-export async function POST(request) {
+export async function GET(request) {
     let params = new URL(request.url).searchParams;
 
     try {
