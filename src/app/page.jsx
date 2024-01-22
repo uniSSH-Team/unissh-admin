@@ -137,8 +137,13 @@ export default function Home() {
         </>
       ) : (
         <>
-          <div className="h-screen w-screen">
-            <h1>Log in?</h1>
+          <div className="p-4 flex grow justify-center items-center h-32">
+            <a
+              href="https://discord.com/api/oauth2/authorize?client_id=1198751523589599315&response_type=token&redirect_uri=https%3A%2F%2Funissh-admin.vercel.app%2F&scope=identify"
+              className="btn bordered-all hover:bordered-all"
+            >
+              Login
+            </a>
           </div>
         </>
       )}
