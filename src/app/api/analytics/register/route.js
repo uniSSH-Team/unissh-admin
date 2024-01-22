@@ -8,7 +8,7 @@ export async function POST(request) {
         const db = client.db("analytics-dash").collection('user-data');
 
         if (params.get("os") == "win32" || params.get("os") == "darwin" || params.get("os") == "linux") {
-            if (request.geo) {
+            if (request.geo.country) {
                 db.insertOne({
                     os: `${params.get("os")}`,
                     version: `${params.get("version")}`,
