@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [verified, setVerified] = useState(false);
 
+  const [data, setData] = useState({});
+
   useEffect(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     const [accessToken, tokenType] = [
@@ -31,7 +33,12 @@ export default function Home() {
         }
       })
       .catch(console.error);
-  });
+
+    fetch("/api/analytics").then((result) => {
+      setData(result);
+      console.log(result);
+    });
+  }, []);
 
   return (
     <main className="h-screen w-screen">
