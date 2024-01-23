@@ -11,8 +11,8 @@ export async function GET(request) {
 
         lastMonth.setMonth(lastMonth.getMonth() - 1);
 
-        let byVersion = {}
-        let byVersionMonthly = {}
+        let byVersion = []
+        let byVersionMonthly = []
 
         let versions = await userData.distinct("version")
 
@@ -23,14 +23,18 @@ export async function GET(request) {
                     $gte: lastMonth
                 }
             }).then((count) => {
-                byVersionMonthly[`${element}`] = count.toString()
+                byVersionMonthly.push({
+                    [element]: count.toString()
+                })
             })
 
             userData.countDocuments({
                 version: element
             }).then((count) => {
                 if (count > 0) {
-                    byVersion[`${element}`] = count.toString()
+                    byVersion.push({
+                        [element]: count.toString()
+                    })
                 }
             })
         });

@@ -5,7 +5,33 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [verified, setVerified] = useState(false);
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    totalRegistered: 0,
+    byOS: {
+      win32: 0,
+      darwin: 0,
+      linux: 0,
+    },
+    byVersion: [
+      {
+        "v0.0.1": "0",
+      },
+    ],
+    lastMonth: {
+      totalRegistered: 0,
+      byOS: {
+        win32: 0,
+        darwin: 0,
+        linux: 0,
+      },
+      byVersionMonthly: [
+        {
+          "v0.0.1": "0",
+        },
+      ],
+    },
+  });
+  const [popularVersion, setPopularVersion] = useState("v0");
 
   useEffect(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
@@ -34,10 +60,20 @@ export default function Home() {
       })
       .catch(console.error);
 
-    fetch("/api/analytics").then((result) => {
-      setData(result);
-      console.log(result);
-    });
+    fetch("/api/analytics")
+      .then((result) => result.json())
+      .then((response) => {
+        setData(response);
+
+        console.log(response);
+
+        setPopularVersion(
+          response.byVersion.reduce((prev, current) => {
+            return prev > current ? prev : current;
+          })
+        );
+      })
+      .catch(console.error);
   }, []);
 
   return (
@@ -106,25 +142,21 @@ export default function Home() {
           <div className="flex flex-col p-4 gap-3">
             <div className="">
               <div className="label pt-0 font-semibold text-xl text-shadow-white">
-                User Statistics:
+                Register Statistics:
               </div>
               <div className="stats shadow-xl bg-black">
                 <div className="stat">
-                  <div className="stat-title">Montly active users</div>
-                  <div className="stat-value">31K</div>
-                  <div className="stat-desc">Last 31 Days</div>
+                  <div className="stat-title">Total Registered</div>
+                  <div className="stat-value">{data.totalRegistered}</div>
+                  <div className="stat-desc">From Analytics API</div>
                 </div>
 
                 <div className="stat">
                   <div className="stat-title">New Users</div>
-                  <div className="stat-value">5k</div>
+                  <div className="stat-value">
+                    {data.lastMonth.totalRegistered}
+                  </div>
                   <div className="stat-desc">Last 31 Days</div>
-                </div>
-
-                <div className="stat">
-                  <div className="stat-title">Feature Requests</div>
-                  <div className="stat-value">13</div>
-                  <div className="stat-desc">From GitHub</div>
                 </div>
 
                 <div className="stat">
@@ -135,7 +167,9 @@ export default function Home() {
 
                 <div className="stat">
                   <div className="stat-title">Most popular version:</div>
-                  <div className="stat-value">v0.0.1</div>
+                  <div className="stat-value">
+                    {Object.keys(popularVersion)[0]}
+                  </div>
                   <div className="stat-desc">From Analytics API</div>
                 </div>
               </div>
