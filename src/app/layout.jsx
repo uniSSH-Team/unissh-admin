@@ -10,11 +10,13 @@ export const metadata = {
   description: "uniSSH dashboard for stats and other data",
 };
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {children}</body>
+      <SpeedInsights></SpeedInsights>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
