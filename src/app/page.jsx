@@ -31,7 +31,10 @@ export default function Home() {
       ],
     },
   });
-  const [popularVersion, setPopularVersion] = useState("v0");
+
+  const [popularVersion, setPopularVersion] = useState("v0.0.0");
+
+  const [latestRelease, setLatestRelease] = useState("v0.0.0");
 
   useEffect(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
@@ -65,13 +68,20 @@ export default function Home() {
       .then((response) => {
         setData(response);
 
-        console.log(response);
-
         setPopularVersion(
           response.byVersion.reduce((prev, current) => {
             return prev > current ? prev : current;
           })
         );
+      })
+      .catch(console.error);
+
+    fetch(
+      "https://api.github.com/repos/unissh-team/unissh-releases/releases/latest"
+    )
+      .then((result) => result.json())
+      .then((response) => {
+        setLatestRelease(response.tag_name);
       })
       .catch(console.error);
   }, []);
@@ -160,17 +170,11 @@ export default function Home() {
                 </div>
 
                 <div className="stat">
-                  <div className="stat-title">Current Version:</div>
-                  <div className="stat-value">v0.0.1</div>
-                  <div className="stat-desc">From GitHub</div>
-                </div>
-
-                <div className="stat">
                   <div className="stat-title">Most popular version:</div>
                   <div className="stat-value">
                     {Object.keys(popularVersion)[0]}
                   </div>
-                  <div className="stat-desc">From Analytics API</div>
+                  <div className="stat-desc">Latest: {latestRelease}</div>
                 </div>
               </div>
             </div>
